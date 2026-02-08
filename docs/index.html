@@ -31,7 +31,7 @@
       padding: 10px 20px;
       margin: 10px;
       cursor: pointer;
-      transition: font-size 0.3s ease, transform 0.2s ease;
+      transition: font-size 0.3s ease, transform 0.1s ease;
     }
 
     #noBtn {
@@ -43,7 +43,6 @@
       padding: 10px 20px;
       margin: 10px;
       cursor: pointer;
-      position: relative;
     }
 
     p {
@@ -53,7 +52,7 @@
       max-width: 90%;
     }
 
-    /* Bouncing animation for intro GIF */
+    /* Intro GIF bounce animation */
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-15px); }
@@ -65,7 +64,16 @@
       animation: bounce 1s infinite;
     }
 
-    /* Center final content */
+    /* Yes button shake animation */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Final screen container */
     #finalContent {
       display: flex;
       flex-direction: column;
@@ -94,11 +102,10 @@
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const question = document.getElementById("question");
-    const introGif = document.getElementById("introGif");
 
     let yesSize = 40;
     let noClicks = 0;
-    const maxYesSize = 500;
+    const maxYesSize = 500; // max size to prevent overflow
 
     const messages = [
       "whyyyy",
@@ -109,33 +116,34 @@
       "pleaseee?"
     ];
 
-    // Move No button randomly on each click
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20);
-      noBtn.style.position = "absolute";
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-    });
-
+    // On No click, Yes grows and shakes
     noBtn.addEventListener("click", () => {
       question.textContent = messages[noClicks % messages.length];
       noClicks++;
 
-      yesSize *= 2;
+      // Make Yes bigger
+      yesSize *= 1.5;
       if (yesSize > maxYesSize) yesSize = maxYesSize;
       yesBtn.style.fontSize = yesSize + "px";
+
+      // Trigger shake
+      yesBtn.style.animation = "shake 0.3s";
+      // Remove animation after it ends so it can trigger again
+      yesBtn.addEventListener("animationend", () => {
+        yesBtn.style.animation = "";
+      }, { once: true });
     });
 
+    // On Yes click, show final message + paragraph + GIF
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = `
         <div id="finalContent">
           <h1>yayyy im so grateful honeyyy :3</h1>
           <p>
-            You mean so much to me and I am so so so happy 
+           You mean so much to me ridhi and I am so so so happy 
             that I get to spend Valentine's Day with youuu. You deserve to
-            feel special and cared for, and I will continue to do just that and more. 
-            I'm sooo excited to come see your pretty face and just be around you next weekend.
+            feel so so special and cared for, and I will continue to do just that and more. 
+            I'm sooo excited to come see your pretty face and just be in your presence <3
             I hope this made you smile sweet girl, and thank youuu again (for being you!)
           </p>
           <img src="happy.gif" alt="happy gif">
