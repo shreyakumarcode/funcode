@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>funcode</title>
+  <title>Valentine?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -31,6 +31,7 @@
       margin: 10px 0;
       cursor: pointer;
       transition: all 0.3s ease;
+      white-space: nowrap; /* prevent text wrap */
     }
 
     #yesBtn {
@@ -39,6 +40,7 @@
       color: white;
       width: 60%;
       max-width: 300px;
+      min-width: 120px;
     }
 
     #noBtn {
@@ -47,6 +49,7 @@
       color: white;
       width: 60%;
       max-width: 300px;
+      min-width: 120px;
     }
 
     #openBtn {
@@ -136,9 +139,11 @@
     });
 
     // Yes/No logic
-    let yesSize = 40;
+    let yesSize = 40; // starting font size
+    let yesWidth = 60; // starting width percentage
     let noClicks = 0;
-    const maxYesSize = 500;
+    const maxYesSize = 200; // slower growth
+    const maxYesWidth = 90; // max width percent
 
     const messages = [
       "whyyyy",
@@ -153,10 +158,15 @@
       question.textContent = messages[noClicks % messages.length];
       noClicks++;
 
-      // Grow Yes button
-      yesSize *= 1.5;
+      // Slower growth for Yes button
+      yesSize += 10; // increase font by 10px each tap
       if (yesSize > maxYesSize) yesSize = maxYesSize;
       yesBtn.style.fontSize = yesSize + "px";
+
+      // Increase button width proportionally
+      yesWidth += 5; // increase width percent
+      if (yesWidth > maxYesWidth) yesWidth = maxYesWidth;
+      yesBtn.style.width = yesWidth + "%";
 
       // Shake animation
       yesBtn.style.animation = "shake 0.3s";
