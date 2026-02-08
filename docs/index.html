@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>funcode</title>
+  <title>Valentine?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -15,34 +15,38 @@
       background: pink;
       text-align: center;
       padding: 10px;
-      overflow-x: hidden; /* prevents horizontal scroll when Yes grows */
+      overflow-x: hidden;
     }
 
     h1 {
       margin-bottom: 20px;
     }
 
-    #yesBtn {
-      font-size: 40px;
-      background-color: green;
-      color: white;
+    button {
       border: none;
       border-radius: 5px;
       padding: 10px 20px;
       margin: 10px;
       cursor: pointer;
-      transition: font-size 0.3s ease, transform 0.1s ease;
+      transition: all 0.3s ease;
+    }
+
+    #yesBtn {
+      font-size: 40px;
+      background-color: green;
+      color: white;
     }
 
     #noBtn {
       font-size: 20px;
       background-color: red;
       color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
+    }
+
+    #openBtn {
+      font-size: 22px;
+      background-color: purple;
+      color: white; /* text is white */
     }
 
     p {
@@ -52,19 +56,19 @@
       max-width: 90%;
     }
 
-    /* Intro GIF bounce animation */
+    /* Intro GIF bounce */
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-15px); }
     }
 
-    #introGif {
+    #introGif, #openingGif {
       width: 250px;
       margin-bottom: 20px;
       animation: bounce 1s infinite;
     }
 
-    /* Yes button shake animation */
+    /* Shake animation for Yes button */
     @keyframes shake {
       0% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
@@ -73,7 +77,6 @@
       100% { transform: translateX(0); }
     }
 
-    /* Final screen container */
     #finalContent {
       display: flex;
       flex-direction: column;
@@ -86,26 +89,48 @@
       width: 300px;
       margin-top: 20px;
     }
+
   </style>
 </head>
 <body>
 
-  <h1 id="question">Will you be my Valentineeee?</h1>
-  <img id="introGif" src="valentine_intro.gif" alt="Valentine GIF">
+  <!-- Opening Page -->
+  <div id="openingPage">
+    <h1>Hey babyy, I have a question for you...</h1>
+    <img id="openingGif" src="opening.gif" alt="Opening GIF">
+    <button id="openBtn">Okay...</button>
+  </div>
 
-  <div>
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+  <!-- Main Valentine Page (hidden initially) -->
+  <div id="mainPage" style="display:none;">
+    <h1 id="question">Will you be my Valentineeee?</h1>
+    <img id="introGif" src="valentine_intro.gif" alt="Valentine GIF">
+    <div>
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
   </div>
 
   <script>
+    // Elements
+    const openingPage = document.getElementById("openingPage");
+    const mainPage = document.getElementById("mainPage");
+    const openBtn = document.getElementById("openBtn");
+
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
     const question = document.getElementById("question");
 
+    // Show main page on button click
+    openBtn.addEventListener("click", () => {
+      openingPage.style.display = "none";
+      mainPage.style.display = "flex";
+    });
+
+    // Variables for Yes/No page
     let yesSize = 40;
     let noClicks = 0;
-    const maxYesSize = 500; // max size to prevent overflow
+    const maxYesSize = 500;
 
     const messages = [
       "whyyyy",
@@ -116,34 +141,32 @@
       "pleaseee?"
     ];
 
-    // On No click, Yes grows and shakes
+    // No button click: grow & shake Yes
     noBtn.addEventListener("click", () => {
       question.textContent = messages[noClicks % messages.length];
       noClicks++;
 
-      // Make Yes bigger
       yesSize *= 1.5;
       if (yesSize > maxYesSize) yesSize = maxYesSize;
       yesBtn.style.fontSize = yesSize + "px";
 
-      // Trigger shake
+      // Shake animation
       yesBtn.style.animation = "shake 0.3s";
-      // Remove animation after it ends so it can trigger again
       yesBtn.addEventListener("animationend", () => {
         yesBtn.style.animation = "";
       }, { once: true });
     });
 
-    // On Yes click, show final message + paragraph + GIF
+    // Yes button click: show final message
     yesBtn.addEventListener("click", () => {
       document.body.innerHTML = `
         <div id="finalContent">
           <h1>yayyy im so grateful honeyyy :3</h1>
           <p>
-           You mean so much to me ridhi and I am so so so happy 
+            You mean so much to me and I am so so so happy 
             that I get to spend Valentine's Day with youuu. You deserve to
-            feel so so special and cared for, and I will continue to do just that and more. 
-            I'm sooo excited to come see your pretty face and just be in your presence <3
+            feel special and cared for, and I will continue to do just that and more. 
+            I'm sooo excited to come see your pretty face and just be around you next weekend.
             I hope this made you smile sweet girl, and thank youuu again (for being you!)
           </p>
           <img src="happy.gif" alt="happy gif">
